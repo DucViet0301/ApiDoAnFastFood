@@ -9,7 +9,6 @@ router.get("/", (require, response) => {
   db.query(sql, (error, data) => {
     if(error){
       return response.status(500).json({error: errors})
-
     }
     response.json(data);
   });
