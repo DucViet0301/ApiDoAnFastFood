@@ -4,9 +4,9 @@ const mysql = require("mysql2");
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "123456",
   database: "doanappfood",
-  port:'4306'
+  // port:'4306'
 });
 
 module.exports = db;
