@@ -3,7 +3,7 @@ const route = express.Router();
 const db = require("../db");
 
 route.post("/", (req, res) => {
-    const idProduct = parseInt(req.body.idProduct);
+  const idProduct = parseInt(req.body.idProduct);
   const sql = `
     SELECT
       p.id AS product_or_combo_id,
@@ -11,7 +11,7 @@ route.post("/", (req, res) => {
       p.image AS image,
       p.sale_price,
       p.list_price,
-      pi.id AS product_id,
+      pi.id AS product_item_id, -- Lấy thêm ID để định danh món trong combo
       pi.name AS product_name,
       pi.image AS product_image,
       ci.quantity AS quantity,
@@ -26,20 +26,16 @@ route.post("/", (req, res) => {
     WHERE p.id = ?;
   `;
 
-  db.query(sql,[idProduct], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ err: "Database error", detail: err });
-    }
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
+  db.query(sql, [idProduct], (err, rows) => {
+    if (err) return res.status(500).json({ err: "Database error", detail: err });
+    if (rows.length === 0) return res.status(404).json({ message: "Không tìm thấy" });
 
     const productdetailMap = new Map();
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
+    rows.forEach((row) => {
       const id = row.product_or_combo_id;
 
+      // 1. Khởi tạo object cha nếu chưa có
       if (!productdetailMap.has(id)) {
         productdetailMap.set(id, {
           id: id,
@@ -52,23 +48,39 @@ route.post("/", (req, res) => {
         });
       }
 
-      if (row.product_name) {
-        productdetailMap.get(id).item_product.push({
-          name: row.product_name,
-          image: row.product_image,
-          quantity: row.quantity
-        });
+      const currentProduct = productdetailMap.get(id);
+
+      // 2. Thêm món ăn vào combo (Check trùng bằng ID sản phẩm con)
+      if (row.product_item_id) {
+        const isProductExist = currentProduct.item_product.some(
+          (item) => item.id === row.product_item_id
+        );
+        if (!isProductExist) {
+          currentProduct.item_product.push({
+            id: row.product_item_id,
+            name: row.product_name,
+            image: row.product_image,
+            quantity: row.quantity
+          });
+        }
       }
 
+      // 3. Thêm nước sốt (Check trùng bằng tên nước sốt)
       if (row.sauce_name) {
-        productdetailMap.get(id).item_sauces.push({
-          name: row.sauce_name,
-          image: row.image_name_sauce,
-          price: row.price_name_sauce,
-        });
+        const isSauceExist = currentProduct.item_sauces.some(
+          (sauce) => sauce.name === row.sauce_name
+        );
+        if (!isSauceExist) {
+          currentProduct.item_sauces.push({
+            name: row.sauce_name,
+            image: row.image_name_sauce,
+            price: row.price_name_sauce,
+          });
+        }
       }
-    }
+    });
 
+    // Chuyển Map thành Array và dọn dẹp mảng rỗng
     const result = Array.from(productdetailMap.values()).map(item => {
       if (item.item_product.length === 0) delete item.item_product;
       if (item.item_sauces.length === 0) delete item.item_sauces;
