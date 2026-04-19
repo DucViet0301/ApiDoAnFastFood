@@ -6,7 +6,14 @@ const db = mysql.createPool({
   user: "root",
   password: "123456",
   database: "doanappfood",
-  // port:'4306'
+});
+db.getConnection((err, connection) => {
+  if (err) {
+    console.log("Lỗi kết nối DB:", err);
+  } else {
+    console.log("Kết nối DB thành công");
+    connection.release();
+  }
 });
 
 module.exports = db;
