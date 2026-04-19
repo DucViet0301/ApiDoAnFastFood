@@ -2,8 +2,9 @@ const express = require("express");
 const route = express.Router();
 const db = require("../db");
 
-route.get("/", (req, res) => {
-  const sql = `
+route.get("/", async (req, res) => {
+  try{
+    const [data] = await db.query( `
       SELECT
       p_combo.id AS combo_id,
       p_combo.name AS combo_name,
@@ -18,16 +19,12 @@ route.get("/", (req, res) => {
       JOIN combo_items ci On ci.combo_id = c.id
       JOiN products p_item On p_item.id = ci.product_id
       WHERE p_combo.category_id=2
-  `;
-  db.query(sql , (err, rows) => {
-    if(err){
-      return res.status(500).json({error:"Database error", details: err})
-    }
-    const comboMap = new Map();
-    for(let i=0; i < rows.length;i++){
-      const row = rows[i];
-      const id = row.combo_id;
-      if (!comboMap.has(id)){
+  `);
+  const comboMap = new Map();
+  for(let i = 0 ; i < data.length; i++){
+    const row = data[i];
+    const id = row.combo_id;
+    if (!comboMap.has(id)){
         comboMap.set(id, {
           id: id,
           name: row.combo_name,
@@ -44,6 +41,9 @@ route.get("/", (req, res) => {
       });
     }
     res.json(Array.from(comboMap.values()));
-  });
+  }
+  catch(error){
+    return res.status(500).json({error: error.message});
+  }
 });
 module.exports = route;

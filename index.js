@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require('dotenv').config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,6 +13,7 @@ const NewRouter = require("./APi/get_new");
 const CategoryRouter = require("./APi/get_category");
 const ProductRouter = require("./APi/get_product");
 const StoreRouter = require("./APi/store_router");
+const PromotionNewsRouter = require("./APi/get_promotionnews");
 
 // gắn route
 app.use("/banners", BannerRouter);
@@ -21,6 +23,7 @@ app.use("/news", NewRouter);
 app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);
 app.use("/stores", StoreRouter);
+app.use("/promotionnews", PromotionNewsRouter);
 
 // test server
 app.get("/", (req, res) => {
