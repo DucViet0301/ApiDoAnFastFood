@@ -1,16 +1,15 @@
-const express = require("express")
+const express = require("express");
 const router = express.Router();
 
-const db = require('../db');
+const db = require("../db");
 
+router.get("/", async (req, res) => {
+  try {
+    const [data] = await db.query("SELECT * FROM banner");
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-router.get("/", (require, response) => {
-  const sql = "Select * from banner"
-  db.query(sql, (error, data) => {
-    if(error){
-      return response.status(500).json({error: errors})
-    }
-    response.json(data);
-  });
-})
 module.exports = router;

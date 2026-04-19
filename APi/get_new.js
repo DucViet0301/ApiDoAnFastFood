@@ -4,23 +4,24 @@ const router = express.Router();
 const db = require('../db');
 
 
-router.get("/", (request, response) => {
-  const sql = "Select * from news"
-  db.query(sql, (error, data) => {
-    if(error){
-      return response.status(500).json({error: errors})
-    }
+router.get("/", async (request, response) => {
+  try {
+    const [data] = await db.query("SELECT * FROM news");
     response.json(data);
-  });
-})
+  }
+  catch (error) {
+    return response.status(500).json({ error: error.message })
+  }
+});
 
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
-  const sql = "SELECT * FROM news WHERE id = ?";
-
-  db.query(sql, [id], (err, data) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(data[0]);
-  });
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const [data] = await db.query("SELECT * FROM news WHERE id = ?", [id]);
+    res.json(data);
+  }
+  catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
 module.exports = router;

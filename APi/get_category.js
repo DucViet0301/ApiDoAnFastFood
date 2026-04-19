@@ -4,13 +4,13 @@ const router = express.Router();
 const db = require('../db');
 
 
-router.get("/", (require, response) => {
-  const sql = "Select * from categories"
-  db.query(sql, (error, data) => {
-    if(error){
-      return response.status(500).json({error: errors})
-    }
-    response.json(data);
-  });
+router.get("/", async (req, res) => {
+  try{
+    const [data] = await db.query("Select * from categories")
+    res.json(data)
+  }
+  catch(error){
+    res.status(500).json({error: error.message});
+  }
 })
 module.exports = router;
