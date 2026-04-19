@@ -1,4 +1,5 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
+
 
 // dùng pool cho ổn định
 const db = mysql.createPool({
