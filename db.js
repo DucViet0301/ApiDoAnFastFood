@@ -2,10 +2,11 @@ const mysql = require("mysql2");
 
 // dùng pool cho ổn định
 const db = mysql.createPool({
-  host: "localhost",
+  host: "127.0.0.1",
   user: "root",
-  password: "123456",
+  password: "",
   database: "doanappfood",
+  port: "3306",
 });
 db.getConnection((err, connection) => {
   if (err) {
