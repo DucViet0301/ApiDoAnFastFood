@@ -57,6 +57,7 @@ route.post("/", async (req, res) => {
 
       const currentProduct = productdetailMap.get(id);
 
+      // 2. Thêm món ăn vào combo (Check trùng bằng ID sản phẩm con)
       if (row.product_item_id) {
         const exists = currentProduct.item_product.some(
           (item) => item.id === row.product_item_id
@@ -72,6 +73,7 @@ route.post("/", async (req, res) => {
         }
       }
 
+      // 3. Thêm nước sốt (Check trùng bằng tên nước sốt)
       if (row.sauce_name) {
         const exists = currentProduct.item_sauces.some(
           (s) => s.name === row.sauce_name
