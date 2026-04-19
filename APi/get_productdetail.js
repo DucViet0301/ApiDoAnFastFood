@@ -34,11 +34,6 @@ route.post("/", (req, res) => {
 
     rows.forEach((row) => {
       const id = row.product_or_combo_id;
-<<<<<<< HEAD
-
-      // 1. Khởi tạo object cha nếu chưa có
-=======
->>>>>>> 192903404cfd06d506a52bda4445574497ef2afc
       if (!productdetailMap.has(id)) {
         productdetailMap.set(id, {
           id: id,
@@ -53,10 +48,7 @@ route.post("/", (req, res) => {
 
       const currentProduct = productdetailMap.get(id);
 
-<<<<<<< HEAD
       // 2. Thêm món ăn vào combo (Check trùng bằng ID sản phẩm con)
-=======
->>>>>>> 192903404cfd06d506a52bda4445574497ef2afc
       if (row.product_item_id) {
         const isProductExist = currentProduct.item_product.some(
           (item) => item.id === row.product_item_id
