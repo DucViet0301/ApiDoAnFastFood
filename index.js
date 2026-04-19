@@ -29,8 +29,8 @@ app.use("/promotionnews", PromotionNewsRouter);
 app.get("/", (req, res) => {
   res.send("Server OK");
 });
-
+app.use(express.urlencoded({ extended: true }));
 // chạy server
 app.listen(3000, "0.0.0.0", () => {
-  console.log("Server chạy tại http://192.168.1.6:3000");
+  console.log("Server chạy tại http://192.168.28.1:3000");
 });
