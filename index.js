@@ -14,7 +14,7 @@ const CategoryRouter = require("./APi/get_category");
 const ProductRouter = require("./APi/get_product");
 const StoreRouter = require("./APi/store_router");
 const PromotionNewsRouter = require("./APi/get_promotionnews");
-
+const UserRouter = require("./APi/user_router");
 // gắn route
 app.use("/banners", BannerRouter);
 app.use("/productdetails", ProductDetailRouter);
@@ -24,7 +24,7 @@ app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);
 app.use("/stores", StoreRouter);
 app.use("/promotionnews", PromotionNewsRouter);
-
+app.use("/users", UserRouter);
 // test server
 app.get("/", (req, res) => {
   res.send("Server OK");
@@ -32,5 +32,5 @@ app.get("/", (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 // chạy server
 app.listen(3000, "0.0.0.0", () => {
-  console.log("Server chạy tại http://192.168.28.1:3000");
+  console.log("Server chạy tại http://192.168.1.5:3000");
 });

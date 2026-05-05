@@ -7,7 +7,7 @@ const db = mysql.createPool({
   user: "root",
   password: "",
   database: "doanappfood",
-  port: "3306",
+  port: "4306",
 });
 db.getConnection((err, connection) => {
   if (err) {
