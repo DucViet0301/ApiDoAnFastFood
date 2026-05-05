@@ -14,6 +14,7 @@ const CategoryRouter = require("./APi/get_category");
 const ProductRouter = require("./APi/get_product");
 const StoreRouter = require("./APi/store_router");
 const PromotionNewsRouter = require("./APi/get_promotionnews");
+const chatbot = require("./APi/chatbox_ai");
 
 // gắn route
 app.use("/banners", BannerRouter);
@@ -24,6 +25,7 @@ app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);
 app.use("/stores", StoreRouter);
 app.use("/promotionnews", PromotionNewsRouter);
+app.use("/chatbot", chatbot);
 
 // test server
 app.get("/", (req, res) => {
