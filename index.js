@@ -14,6 +14,9 @@ const CategoryRouter = require("./APi/get_category");
 const ProductRouter = require("./APi/get_product");
 const StoreRouter = require("./APi/store_router");
 const PromotionNewsRouter = require("./APi/get_promotionnews");
+const LoginRouter = require("./APi/login");
+const RegisterRouter = require("./APi/register");
+const RefreshTokenRouter = require("./APi/refresh_token");
 const PostOrderRouter = require("./APi/post_order");
 const chatbot = require("./APi/chatbox_ai");
 
@@ -27,6 +30,9 @@ app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);
 app.use("/stores", StoreRouter);
 app.use("/promotionnews", PromotionNewsRouter);
+app.use("/login", LoginRouter);
+app.use("/register", RegisterRouter);
+app.use("/refresh-token", RefreshTokenRouter);
 app.use("/chatbot", chatbot);
 
 // test server
