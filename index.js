@@ -14,11 +14,13 @@ const CategoryRouter = require("./APi/get_category");
 const ProductRouter = require("./APi/get_product");
 const StoreRouter = require("./APi/store_router");
 const PromotionNewsRouter = require("./APi/get_promotionnews");
+const PostOrderRouter = require("./APi/post_order");
 
 // gắn route
 app.use("/banners", BannerRouter);
 app.use("/productdetails", ProductDetailRouter);
 app.use("/combos", ComboRouter);
+app.use("/orders", PostOrderRouter);
 app.use("/news", NewRouter);
 app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);
