@@ -19,6 +19,7 @@ const RegisterRouter = require("./APi/register");
 const RefreshTokenRouter = require("./APi/refresh_token");
 const PostOrderRouter = require("./APi/post_order");
 const chatbot = require("./APi/chatbox_ai");
+const UserRouter = require("./APi/user_router");
 
 // gắn route
 app.use("/banners", BannerRouter);
@@ -34,6 +35,8 @@ app.use("/login", LoginRouter);
 app.use("/register", RegisterRouter);
 app.use("/refresh-token", RefreshTokenRouter);
 app.use("/chatbot", chatbot);
+app.use("/users", UserRouter);
+
 
 // test server
 app.get("/", (req, res) => {
