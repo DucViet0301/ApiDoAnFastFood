@@ -8,6 +8,7 @@ const db = mysql.createPool({
   password: "",
   database: "doanappfood",
   port: "3306",
+  timezone: "Z",
 });
 db.getConnection((err, connection) => {
   if (err) {

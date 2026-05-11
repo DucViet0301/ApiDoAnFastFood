@@ -4,14 +4,15 @@ const db = require("../db");
 
 route.post("/", async (req, res) => {
   let connection;
-
-  try {
-    connection = await db.getConnection();
-  } catch (err) {
-    return handleOrder(db, req, res);
-  }
-
-  await handleOrder(connection, req, res, true);
+    try {
+        connection = await db.getConnection();
+        await handleOrder(connection, req, res, true);
+    } catch (err) {
+        return res.status(500).json({ 
+            success: false,
+            error: "Không kết nối được database: " + err.message 
+        });
+    }
 });
 
 async function handleOrder(conn, req, res, useRelease = false) {
@@ -39,8 +40,8 @@ async function handleOrder(conn, req, res, useRelease = false) {
 
     const [orderResult] = await conn.query(
       `INSERT INTO orders 
-        (user_id, total_price, status, address, time, note, distance, is_dungcu, is_tuongca, is_tuongot, created_at)
-       VALUES (?, ?, 'Đang xử lý', ?, ?, ?, ?, ?, ?, ?, NOW())`,
+        (user_id, total_price, status, address, time, note, distance, is_dungcu, is_tuongca, is_tuongot, created_at, updated_at)
+       VALUES (?, ?, 'Đang xử lý', ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
       [
         user_id || null,
         sale_total,
@@ -93,12 +94,13 @@ async function handleOrder(conn, req, res, useRelease = false) {
     await conn.query("COMMIT");
 
     res.status(201).json({
+      success: true,
       message: "Đặt hàng thành công",
       order_id: orderId
     });
 
   } catch (error) {
-    await conn.query("ROLLBACK").catch(() => { });
+    await conn.query("ROLLBACK").catch(() => {});
     return res.status(500).json({ error: error.message });
   } finally {
     if (useRelease && conn.release) conn.release();
