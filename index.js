@@ -20,6 +20,7 @@ const RefreshTokenRouter = require("./APi/refresh_token");
 const PostOrderRouter = require("./APi/post_order");
 const chatbot = require("./APi/chatbox_ai");
 const UserRouter = require("./APi/user_router");
+const GetOrder = require("./APi/get_order");
 
 // gắn route
 app.use("/banners", BannerRouter);
@@ -36,6 +37,7 @@ app.use("/register", RegisterRouter);
 app.use("/refresh-token", RefreshTokenRouter);
 app.use("/chatbot", chatbot);
 app.use("/users", UserRouter);
+app.use('/getOrder', GetOrder)
 
 
 // test server

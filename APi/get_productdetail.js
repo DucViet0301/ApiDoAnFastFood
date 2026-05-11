@@ -49,15 +49,13 @@ route.post("/", async (req, res) => {
           image: row.image,
           sale_price: row.sale_price,
           list_price: row.list_price,
-          is_combo: row.is_combo,
+          is_combo: row.is_combo === 1,
           item_product: [],
           item_sauces: []
         });
       }
 
       const currentProduct = productdetailMap.get(id);
-
-      // 2. Thêm món ăn vào combo (Check trùng bằng ID sản phẩm con)
       if (row.product_item_id) {
         const exists = currentProduct.item_product.some(
           (item) => item.id === row.product_item_id
