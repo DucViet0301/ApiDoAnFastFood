@@ -18,6 +18,7 @@ const LoginRouter = require("./APi/login");
 const RegisterRouter = require("./APi/register");
 const RefreshTokenRouter = require("./APi/refresh_token");
 const PostOrderRouter = require("./APi/post_order");
+const PostPaymentRouter = require("./APi/post_payment");
 const chatbot = require("./APi/chatbox_ai");
 const UserRouter = require("./APi/user_router");
 
@@ -26,6 +27,7 @@ app.use("/banners", BannerRouter);
 app.use("/productdetails", ProductDetailRouter);
 app.use("/combos", ComboRouter);
 app.use("/orders", PostOrderRouter);
+app.use("/payment", PostPaymentRouter);
 app.use("/news", NewRouter);
 app.use("/category", CategoryRouter);
 app.use("/products", ProductRouter);

@@ -4,7 +4,7 @@ const db = require("../db");
 
 route.post("/", async (req, res) => {
   let connection;
-  
+
   try {
     connection = await db.getConnection();
   } catch (err) {
@@ -27,7 +27,8 @@ async function handleOrder(conn, req, res, useRelease = false) {
       utensils,
       ketchup,
       chili,
-      cart_items
+      cart_items,
+      momo_success
     } = req.body;
 
     if (!address || !payment_method || !cart_items || cart_items.length === 0) {
@@ -77,10 +78,16 @@ async function handleOrder(conn, req, res, useRelease = false) {
       }
     }
 
+    const isMomo = payment_method === "Ví MoMo";
+    const paymentStatus = !isMomo
+      ? "Chưa thanh toán"
+      : momo_success
+        ? "Đã thanh toán"
+        : "Thanh toán thất bại";
     await conn.query(
       `INSERT INTO payments (order_id, method, status, amount, created_at)
-       VALUES (?, ?, 'Chưa thanh toán', ?, NOW())`,
-      [orderId, payment_method, sale_total]
+   VALUES (?, ?, ?, ?, NOW())`,
+      [orderId, payment_method, paymentStatus, sale_total]
     );
 
     await conn.query("COMMIT");
@@ -91,7 +98,7 @@ async function handleOrder(conn, req, res, useRelease = false) {
     });
 
   } catch (error) {
-    await conn.query("ROLLBACK").catch(() => {});
+    await conn.query("ROLLBACK").catch(() => { });
     return res.status(500).json({ error: error.message });
   } finally {
     if (useRelease && conn.release) conn.release();
