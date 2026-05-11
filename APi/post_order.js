@@ -28,7 +28,8 @@ async function handleOrder(conn, req, res, useRelease = false) {
       utensils,
       ketchup,
       chili,
-      cart_items
+      cart_items,
+      momo_success
     } = req.body;
 
     if (!address || !payment_method || !cart_items || cart_items.length === 0) {
@@ -78,10 +79,16 @@ async function handleOrder(conn, req, res, useRelease = false) {
       }
     }
 
+    const isMomo = payment_method === "Ví MoMo";
+    const paymentStatus = !isMomo
+      ? "Chưa thanh toán"
+      : momo_success
+        ? "Đã thanh toán"
+        : "Thanh toán thất bại";
     await conn.query(
       `INSERT INTO payments (order_id, method, status, amount, created_at)
-       VALUES (?, ?, 'Chưa thanh toán', ?, NOW())`,
-      [orderId, payment_method, sale_total]
+   VALUES (?, ?, ?, ?, NOW())`,
+      [orderId, payment_method, paymentStatus, sale_total]
     );
 
     await conn.query("COMMIT");
